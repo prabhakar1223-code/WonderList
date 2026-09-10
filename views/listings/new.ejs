@@ -1,0 +1,185 @@
+<% layout("/layouts/boilerplate.ejs") %>
+
+<div class="new-page">
+
+  <div class="new-wrapper">
+
+    <div class="new-header">
+      <h1>Add a new listing</h1>
+      <p>Share your property with travelers around the world.</p>
+    </div>
+
+    <form
+      action="/listings"
+      method="POST"
+      class="new-form needs-validation"
+      enctype="multipart/form-data"
+      
+      novalidate
+    >
+
+      <!-- Title -->
+      <div class="form-group">
+
+        <label for="title">Listing title</label>
+
+        <input
+          type="text"
+          id="title"
+          name="listing[title]"
+          placeholder="Enter your property name"
+          minlength="2"
+          maxlength="100"
+          required
+        >
+
+        <div class="invalid-feedback">
+          Please enter a valid listing title.
+        </div>
+
+      </div>
+
+
+      <!-- Description -->
+      <div class="form-group">
+
+        <label for="description">Description</label>
+
+        <textarea
+          id="description"
+          name="listing[description]"
+          rows="5"
+          placeholder="Tell guests what makes your property special..."
+          minlength="10"
+          maxlength="1000"
+          required
+        ></textarea>
+
+        <div class="invalid-feedback">
+          Please enter a valid listing description.
+        </div>
+
+      </div>
+
+
+      <!-- Image -->
+      <div class="form-group">
+
+        <label for="image">Upload Image</label>
+        <input
+    type="file"
+    id="image"
+    name="listing[image]"
+   
+>
+
+        <div class="invalid-feedback">
+          Please enter a valid image URL.
+        </div>
+
+        <small>
+          Add a direct Image of your property image.
+        </small>
+
+      </div>
+
+
+      <!-- Price -->
+      <div class="form-group">
+
+  <label for="price">Price per night</label>
+
+  <div class="price-input">
+    <span>₹</span>
+
+    <input
+      type="number"
+      id="price"
+      name="listing[price]"
+      placeholder="2500"
+      min="1"
+      required
+    >
+  </div>
+
+  <div class="invalid-feedback">
+    Please enter a valid listing price.
+  </div>
+
+</div>
+
+      <!-- Location + Country -->
+      <div class="form-row">
+
+        <!-- Location -->
+        <div class="form-group">
+
+          <label for="location">Location</label>
+
+          <input
+            type="text"
+            id="location"
+            name="listing[location]"
+            placeholder="Pune"
+            minlength="2"
+            required
+          >
+
+          <div class="invalid-feedback">
+            Please enter a valid listing location.
+          </div>
+
+        </div>
+
+
+        <!-- Country -->
+        <div class="form-group">
+
+          <label for="country">Country</label>
+
+          <input
+            type="text"
+            id="country"
+            name="listing[country]"
+            placeholder="India"
+            minlength="2"
+            required
+          >
+
+          <div class="invalid-feedback">
+            Please enter a valid listing country.
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- Buttons -->
+      <div class="new-actions">
+
+        <a
+          href="/listings"
+          class="cancel-btn"
+        >
+          Cancel
+        </a>
+
+        <button
+          type="submit"
+          class="add-btn"
+        >
+          Add Listing
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+
+
+<!-- Bootstrap Validation -->
+<script src="/js/validation.js"></script>

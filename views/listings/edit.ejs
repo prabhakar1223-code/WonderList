@@ -1,0 +1,220 @@
+<% layout("/layouts/boilerplate.ejs") %>
+
+<div class="edit-page">
+
+  <div class="edit-wrapper">
+
+    <div class="edit-header">
+      <h1>Edit your listing</h1>
+      <p>Update the details of your property.</p>
+    </div>
+
+    <form
+      action="/listings/<%= list._id %>?_method=PUT"
+      method="POST"
+      class="edit-form needs-validation"
+      enctype="multipart/form-data"
+      novalidate
+    >
+
+      <!-- Title -->
+      <div class="form-group">
+
+        <label for="title">Title</label>
+
+        <input
+          type="text"
+          id="title"
+          name="listing[title]"
+          value="<%= list.title %>"
+          placeholder="Enter your listing title"
+          minlength="2"
+          maxlength="100"
+          required
+        >
+
+        <div class="valid-feedback">
+          Looks good!
+        </div>
+
+        <div class="invalid-feedback">
+          Please enter a valid listing title.
+        </div>
+
+      </div>
+
+
+      <!-- Description -->
+      <div class="form-group">
+
+        <label for="description">Description</label>
+
+        <textarea
+          id="description"
+          name="listing[description]"
+          placeholder="Describe your property..."
+          rows="5"
+          minlength="10"
+          maxlength="1000"
+          required
+        ><%= list.description %></textarea>
+
+        <div class="valid-feedback">
+          Looks good!
+        </div>
+
+        <div class="invalid-feedback">
+          Please enter a valid description with at least 10 characters.
+        </div>
+
+      </div>
+      <div>
+        <img src="<%= image_url %>" alt="listing_image" class="edit-listing-img">
+      </div>
+
+      <!-- Image -->
+      <div class="form-group">
+
+        <label for="image">Image </label>
+
+        <input
+          type="file"
+          id="image"
+          name="listing[image]"
+        
+        >
+
+        <div class="valid-feedback">
+          Looks good!
+        </div>
+
+        <div class="invalid-feedback">
+          Please upload a valid image.
+        </div>
+
+        <small>
+          Add a URL of the property image.
+        </small>
+
+      </div>
+
+
+      <!-- Price -->
+      <div class="form-group">
+
+        <label for="price">Price per night</label>
+
+        <div class="price-input">
+
+          <span>₹</span>
+
+          <input
+            type="number"
+            id="price"
+            name="listing[price]"
+            value="<%= list.price %>"
+            placeholder="2500"
+            min="1"
+            required
+          >
+
+           <div class="invalid-feedback">
+          Please enter a valid price.
+        </div>
+
+
+        </div>
+
+        <div class="valid-feedback">
+          Looks good!
+        </div>
+
+       
+
+      </div>
+
+
+      <!-- Location + Country -->
+      <div class="form-row">
+
+        <!-- Location -->
+        <div class="form-group">
+
+          <label for="location">Location</label>
+
+          <input
+            type="text"
+            id="location"
+            name="listing[location]"
+            value="<%= list.location %>"
+            placeholder="Mumbai"
+            minlength="2"
+            required
+          >
+
+          <div class="valid-feedback">
+            Looks good!
+          </div>
+
+          <div class="invalid-feedback">
+            Please enter a valid location.
+          </div>
+
+        </div>
+
+
+        <!-- Country -->
+        <div class="form-group">
+
+          <label for="country">Country</label>
+
+          <input
+            type="text"
+            id="country"
+            name="listing[country]"
+            value="<%= list.country %>"
+            placeholder="India"
+            minlength="2"
+            required
+          >
+
+          <div class="valid-feedback">
+            Looks good!
+          </div>
+
+          <div class="invalid-feedback">
+            Please enter a valid country.
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- Buttons -->
+      <div class="edit-actions">
+
+        <a
+          href="/listings/<%= list._id %>"
+          class="cancel-btn"
+        >
+          Cancel
+        </a>
+
+        <button
+          type="submit"
+          class="update-btn"
+        >
+          Update Listing
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+
+
+<script src="/js/validation.js"></script>

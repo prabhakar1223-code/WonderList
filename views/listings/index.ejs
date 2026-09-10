@@ -1,0 +1,644 @@
+<% layout("/layouts/boilerplate.ejs") %>
+
+
+
+<!-- =====================================================
+     SEARCH + TAX TOGGLE
+===================================================== -->
+
+<div class="listing-search-section">
+
+  <div class="search-row">
+
+
+    <!-- SEARCH -->
+
+    <!-- <form
+      action="/listings"
+      method="GET"
+      class="listing-search"
+    >
+
+      <input
+        type="text"
+        name="search"
+        class="search-input"
+        placeholder="Search destinations, places, or listings..."
+      >
+
+      <button
+        type="submit"
+        class="search-btn"
+      >
+
+        <i class="fa-solid fa-magnifying-glass"></i>
+
+      </button>
+
+    </form>
+ -->
+
+    <!-- TAX TOGGLE -->
+
+    
+
+  </div>
+
+</div>
+
+
+<!-- =====================================================
+     SUCCESS MESSAGE
+===================================================== -->
+
+<%= success %>
+
+
+<!-- =====================================================
+     TITLE
+===================================================== -->
+
+<h1 class="listing-title">
+
+ 
+
+</h1>
+
+
+<!-- =====================================================
+     FILTERS
+===================================================== -->
+
+<div class="filters-wrapper">
+
+  <div class="filters-container">
+
+
+    <!-- LEFT ARROW -->
+
+    <button
+      type="button"
+      class="filter-arrow filter-arrow-left"
+      id="filterLeft"
+      aria-label="Scroll filters left"
+    >
+
+      <i class="fa-solid fa-chevron-left"></i>
+
+    </button>
+
+
+    <!-- FILTER LIST -->
+
+    <div
+      class="filters"
+      id="filters"
+    >
+
+
+      <!-- TRENDING -->
+
+      <div
+        class="filter active"
+        data-filter="trending"
+        onclick="selectCategory(this)"
+      >
+
+        <i class="fa-solid fa-fire"></i>
+
+        <p>Trending</p>
+
+      </div>
+
+
+      <!-- AMAZING VIEWS -->
+
+      <div
+        class="filter"
+        data-filter="amazing-views"
+        onclick="selectCategory(this)"
+      >
+
+        <i class="fa-solid fa-mountain-sun"></i>
+
+        <p>Amazing views</p>
+
+      </div>
+
+
+      <!-- BEACH -->
+
+      <div
+        class="filter"
+        data-filter="beach"
+        onclick="selectCategory(this)"
+      >
+
+        <i class="fa-solid fa-umbrella-beach"></i>
+
+        <p>Beach</p>
+
+      </div>
+
+
+      <!-- MOUNTAINS -->
+
+      <div
+        class="filter"
+        data-filter="mountains"
+        onclick="selectCategory(this)"
+      >
+
+        <i class="fa-solid fa-mountain"></i>
+
+        <p>Mountains</p>
+
+      </div>
+
+
+      <!-- POOLS -->
+
+      <div
+        class="filter"
+        data-filter="pools"
+        onclick="selectCategory(this)"
+      >
+
+        <i class="fa-solid fa-person-swimming"></i>
+
+        <p>Pools</p>
+
+      </div>
+
+
+      <!-- CABINS -->
+
+      <div
+        class="filter"
+        data-filter="cabins"
+        onclick="selectCategory(this)"
+      >
+
+        <i class="fa-solid fa-house"></i>
+
+        <p>Cabins</p>
+
+      </div>
+
+
+      <!-- ROOMS -->
+
+      <div
+        class="filter"
+        data-filter="rooms"
+        onclick="selectCategory(this)"
+      >
+
+        <i class="fa-solid fa-bed"></i>
+
+        <p>Rooms</p>
+
+      </div>
+
+
+      <!-- LUXURY -->
+
+      <div
+        class="filter"
+        data-filter="luxury"
+        onclick="selectCategory(this)"
+      >
+
+        <i class="fa-solid fa-gem"></i>
+
+        <p>Luxury</p>
+
+      </div>
+
+
+      <!-- TOP RATED -->
+
+      <div
+        class="filter"
+        data-filter="top-rated"
+        onclick="selectCategory(this)"
+      >
+
+        <i class="fa-solid fa-star"></i>
+
+        <p>Top rated</p>
+
+      </div>
+
+
+      <!-- FARMS -->
+
+      <div
+        class="filter"
+        data-filter="farms"
+        onclick="selectCategory(this)"
+      >
+
+        <i class="fa-solid fa-wheat-awn"></i>
+
+        <p>Farms</p>
+
+      </div>
+
+
+      <!-- COUNTRYSIDE -->
+
+      <div
+        class="filter"
+        data-filter="countryside"
+        onclick="selectCategory(this)"
+      >
+
+        <i class="fa-solid fa-tree"></i>
+
+        <p>Countryside</p>
+
+      </div>
+
+
+      <!-- LAKE -->
+
+      <div
+        class="filter"
+        data-filter="lake"
+        onclick="selectCategory(this)"
+      >
+
+        <i class="fa-solid fa-water"></i>
+
+        <p>Lake</p>
+
+      </div>
+
+
+      <!-- ISLANDS -->
+
+      <div
+        class="filter"
+        data-filter="islands"
+        onclick="selectCategory(this)"
+      >
+
+        <i class="fa-solid fa-umbrella-beach"></i>
+
+        <p>Islands</p>
+
+      </div>
+
+
+      <!-- CAMPING -->
+
+      <div
+        class="filter"
+        data-filter="camping"
+        onclick="selectCategory(this)"
+      >
+
+        <i class="fa-solid fa-campground"></i>
+
+        <p>Camping</p>
+
+      </div>
+
+
+      <!-- HISTORIC -->
+
+      <div
+        class="filter"
+        data-filter="historic"
+        onclick="selectCategory(this)"
+      >
+
+        <i class="fa-solid fa-landmark"></i>
+
+        <p>Historic</p>
+
+      </div>
+
+
+      <!-- DESIGN -->
+
+      <div
+        class="filter"
+        data-filter="design"
+        onclick="selectCategory(this)"
+      >
+
+        <i class="fa-solid fa-palette"></i>
+
+        <p>Design</p>
+
+      </div>
+
+
+      <!-- SNOW -->
+
+      <div
+        class="filter"
+        data-filter="snow"
+        onclick="selectCategory(this)"
+      >
+
+        <i class="fa-solid fa-snowflake"></i>
+
+        <p>Snow</p>
+
+      </div>
+
+
+      <!-- VINEYARDS -->
+
+      <div
+        class="filter"
+        data-filter="vineyards"
+        onclick="selectCategory(this)"
+      >
+
+        <i class="fa-solid fa-wine-glass"></i>
+
+        <p>Vineyards</p>
+
+      </div>
+
+
+    </div>
+
+
+    <!-- RIGHT ARROW -->
+
+    <button
+      type="button"
+      class="filter-arrow filter-arrow-right"
+      id="filterRight"
+      aria-label="Scroll filters right"
+    >
+
+      <i class="fa-solid fa-chevron-right"></i>
+
+    </button>
+
+  </div>
+
+</div>
+
+
+<!-- =====================================================
+     LISTINGS
+===================================================== -->
+
+<div class="row row-cols-lg-3 row-cols-md-2 row-cols-1 g-4">
+
+
+  <% for(let list of allList) { %>
+
+
+    <div class="col">
+
+      <div class="card listing-card h-100">
+
+
+        <!-- IMAGE -->
+
+        <img
+          src="<%= list.image.url %>"
+          class="card-img-top listing-img"
+          alt="listing_image"
+        >
+
+
+        <!-- CARD BODY -->
+
+        <div class="card-body d-flex flex-column">
+
+
+          <!-- TITLE -->
+
+          <h5 class="card-title">
+
+            <%= list.title %>
+
+          </h5>
+
+
+          <!-- DESCRIPTION -->
+
+          <p class="card-text text-muted">
+
+            <%= list.description %>
+
+          </p>
+
+
+          <!-- LOCATION -->
+
+          <p class="listing-location">
+
+            <%= list.location %>,
+            <%= list.country %>
+
+          </p>
+
+
+          <!-- PRICE -->
+
+          <p class="listing-price mt-auto">
+
+            <b>
+
+              Rs.
+
+              <%= list.price
+                ? list.price.toLocaleString("en-IN")
+                : "N/A"
+              %>
+
+              <span class="tax_info">
+                +18% GST
+              </span>
+
+            </b>
+
+            / night
+
+          </p>
+
+
+          <!-- VIEW LISTING -->
+
+          <a
+            href="/listings/<%= list._id %>"
+            class="btn btn-primary"
+          >
+
+            View Listing
+
+          </a>
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+  <% } %>
+
+
+</div>
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script>
+
+
+  /* =====================================================
+     CATEGORY SELECTION
+  ===================================================== */
+
+  function selectCategory(element) {
+
+    document
+      .querySelectorAll(".filter")
+      .forEach(filter => {
+
+        filter.classList.remove("active");
+
+      });
+
+
+    element.classList.add("active");
+
+
+    const category =
+      element.dataset.filter;
+
+
+    console.log(
+      "Selected category:",
+      category
+    );
+
+
+    /*
+     * BACKEND LOGIC WILL GO HERE
+     *
+     * Later:
+     *
+     * window.location.href =
+     * `/listings?category=${category}`;
+     */
+
+  }
+
+
+  /* =====================================================
+     FILTER HORIZONTAL SCROLL
+  ===================================================== */
+
+  const filters =
+    document.getElementById("filters");
+
+  const leftButton =
+    document.getElementById("filterLeft");
+
+  const rightButton =
+    document.getElementById("filterRight");
+
+
+  const scrollAmount = 350;
+
+
+  /* LEFT */
+
+  leftButton.addEventListener(
+    "click",
+    function() {
+
+      filters.scrollBy({
+
+        left: -scrollAmount,
+
+        behavior: "smooth"
+
+      });
+
+    }
+  );
+
+
+  /* RIGHT */
+
+  rightButton.addEventListener(
+    "click",
+    function() {
+
+      filters.scrollBy({
+
+        left: scrollAmount,
+
+        behavior: "smooth"
+
+      });
+
+    }
+  );
+
+
+  /* =====================================================
+     TAX TOGGLE
+  ===================================================== */
+
+  const taxToggle =
+    document.getElementById("taxToggle");
+
+
+  taxToggle.addEventListener(
+    "change",
+    function() {
+
+      const taxInfo =
+        document.querySelectorAll(".tax_info");
+
+
+      taxInfo.forEach(function(info) {
+
+        if (taxToggle.checked) {
+
+          /*
+           * SHOW GST
+           */
+
+          info.style.display = "inline";
+
+        } else {
+
+          /*
+           * HIDE GST
+           */
+
+          info.style.display = "none";
+
+        }
+
+      });
+
+
+      console.log(
+        "Tax display:",
+        taxToggle.checked
+      );
+
+    }
+  );
+
+
+</script>

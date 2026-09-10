@@ -1,0 +1,80 @@
+<% layout("/layouts/boilerplate.ejs") %>
+
+<div class="signup-page">
+
+  <div class="signup-card">
+
+
+<div class="signup-header">
+  <h1>Create an account</h1>
+  <p>Join Wanderlist and start exploring amazing places.</p>
+</div>
+
+<form
+  action="/login"
+  method="POST"
+  class="signup-form needs-validation"
+  novalidate
+>
+
+  <!-- Username -->
+  <div class="signup-form-group">
+    <label for="username">Username</label>
+
+    <input
+      type="text"
+      id="username"
+      name="username"
+      placeholder="Enter your username"
+      minlength="2"
+      maxlength="100"
+      autocomplete="username"
+      required
+    >
+
+    <div class="invalid-feedback">
+      Please enter a valid username.
+    </div>
+  </div>
+
+  
+
+  <!-- Password -->
+  <div class="signup-form-group">
+    <label for="password">Password</label>
+
+    <input
+      type="password"
+      id="password"
+      name="password"
+      placeholder="Enter your password"
+      minlength="4"
+      autocomplete="new-password"
+      required
+    >
+
+    <div class="invalid-feedback">
+      Password must contain at least 4 characters.
+    </div>
+  </div>
+
+  <!-- Button -->
+  <button type="submit" class="signup-submit">
+    Log in
+  </button>
+
+</form>
+
+<!-- <div class="signup-footer">
+  <p>
+    Already have an account?
+    <a href="/login">Log in</a>
+  </p>
+</div> -->
+
+
+  </div>
+
+</div>
+
+<script src="/js/validation.js"></script>
