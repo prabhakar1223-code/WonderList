@@ -89,7 +89,7 @@ router.post(
     "/",
     isLogin,
     validateListing,
-    upload.single("image"),
+    upload.single("listing[image]"),
     wrapAsync(listingController.createListing)
 );
 
@@ -120,7 +120,7 @@ router.get(
 
 router.put(
     "/:id",isLogin,isOwner,
-    upload.single("image"),
+    upload.single("listing[image]"),
     // validateListing,
     wrapAsync(listingController.updateListing)
 );

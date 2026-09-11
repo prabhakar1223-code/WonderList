@@ -18,7 +18,8 @@ module.exports.renderNewForm=(req, res) => {
 }
 
 module.exports.createListing=async (req, res) => {
-
+        console.log("REQ.BODY =", req.body);
+console.log("CATEGORY =", req.body.listing?.category);
         
         const list = new listing(req.body.listing);
 

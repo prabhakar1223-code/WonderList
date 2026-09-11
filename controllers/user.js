@@ -29,7 +29,7 @@ module.exports.signupHandle = async(req, res, next) => {
     });
 
     req.flash("success", "Successfully signed up");
-    res.redirect("/listings");
+   return res.redirect("/listings");
 
   } catch (e) {
     console.log("SIGNUP ERROR:", e);

@@ -1,7 +1,8 @@
-if(process.env.NODE_ENV!=="production"){
-    require("dotenv").config();
-}
-console.log(process.env.SECRET);
+require("dotenv").config();
+
+const dns = require("dns");
+dns.setServers(["8.8.8.8", "1.1.1.1"]);
+
 const express = require("express");
 const app = express();
 
@@ -11,75 +12,93 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 
 const listing = require("./model/listing.js");
-const { listingSchema,reviewSchema } = require("./schema.js");
+const { listingSchema, reviewSchema } = require("./schema.js");
 const review = require("./model/review.js");
+
 const wrapAsync = require("./utils/wrapAsync");
-const listingRouters=require('./routes/listing.js');
-const reviewRouters=require('./routes/review.js');
-const userRoutes=require('./routes/user.js');
-const flash=require('connect-flash');
-const session=require('express-session');
-const passport=require('passport');
-const LocalStrategy=require('passport-local');
-const User=require('./model/user.js');
-let session_options={
-    secret:"secretcode",
-    resave:false,
-    saveUninitialized:true
-}
 
+const listingRouters = require("./routes/listing.js");
+const reviewRouters = require("./routes/review.js");
+const userRoutes = require("./routes/user.js");
 
+const flash = require("connect-flash");
+const session = require("express-session");
+const MongoStore = require("connect-mongo").default;
+
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
+const User = require("./model/user.js");
+
+const dbUrl = process.env.ATLAS_DB_URL;
+
+// ===============================
+// MongoDB Session Store
+// ===============================
+
+const store = MongoStore.create({
+mongoUrl: dbUrl,
+crypto: {
+secret: process.env.SECRET_CODE
+},
+touchAfter: 24 * 3600
+});
+
+store.on("error", (err) => {
+console.log("ERROR in MONGO SESSION STORE", err);
+});
+
+const session_options = {
+store,
+secret: process.env.SECRET_CODE,
+resave: false,
+saveUninitialized: true
+};
 
 // ===============================
 // MongoDB Connection
 // ===============================
 
+console.log("DB URL exists:", !!dbUrl);
+console.log("SECRET_CODE exists:", !!process.env.SECRET_CODE);
+
 main()
-    .then(() => {
-        console.log("connected to db");
-    })
-    .catch((err) => {
-        console.log(err);
-    });
+.then(() => {
+console.log("connected to db");
+})
+.catch((err) => {
+console.log(err);
+});
 
 async function main() {
-    await mongoose.connect("mongodb://127.0.0.1:27017/wonderlist");
+await mongoose.connect(dbUrl);
 }
-
 
 // ===============================
 // App Configuration
 // ===============================
 
 app.engine("ejs", ejsMate);
-
 app.set("view engine", "ejs");
-
 app.set("views", Path.join(__dirname, "views"));
-
 
 // ===============================
 // Middleware
 // ===============================
 
 app.use(express.static(Path.join(__dirname, "public")));
-
 app.use(express.urlencoded({ extended: true }));
-
 app.use(methodOverride("_method"));
-
 
 // ===============================
 // Home Route
 // ===============================
 
 app.get("/", (req, res) => {
-    res.send("Hi working fine bro");
+res.send("Hi working fine bro");
 });
 
 app.use(session(session_options));
 app.use(flash());
-
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -89,115 +108,112 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 app.use((req, res, next) => {
-    res.locals.success = req.flash("success");
-    res.locals.error = req.flash("error");
-    res.locals.currentUser = req.user;
-    next();
+res.locals.success = req.flash("success");
+res.locals.error = req.flash("error");
+res.locals.currentUser = req.user;
+next();
 });
-
 
 // ===============================
 // API Middleware
 // ===============================
 
 app.use("/api", (req, res, next) => {
+let { token } = req.query;
 
-    let { token } = req.query;
+```
+if (token === "give") {
+    return next();
+}
 
-    if (token === "give") {
-        return next();
-    }
+res.send("Access Denied");
+```
 
-    res.send("Access Denied");
 });
 
-
+// ===============================
 // API Route
+// ===============================
 
 app.get("/api", (req, res) => {
-    res.send("<h1>api is working</h1>");
+res.send("<h1>api is working</h1>");
 });
 
 app.get("/demo_user", async (req, res) => {
-
-    const user = new User({ email: "akshay12@gmail.com",
-        username: "akshay12" });
-        
-    const registeredUser = await User.register(user, "akshay12");
-
-    res.send(registeredUser);
+const user = new User({
+email: "[akshay12@gmail.com](mailto:akshay12@gmail.com)",
+username: "akshay12"
 });
 
+```
+const registeredUser = await User.register(user, "akshay12");
 
-app.use("/listings",listingRouters);
-app.use("/listings",reviewRouters);
-app.use("/",userRoutes);
+res.send(registeredUser);
+```
 
+});
 
-// // ===============================
-// // Joi Validation Middleware
-// // ===============================
+app.use("/listings", listingRouters);
+app.use("/listings", reviewRouters);
+app.use("/", userRoutes);
+
+// ===============================
+// Joi Validation Middleware
+// ===============================
 
 const validateListing = (req, res, next) => {
+const { error } = listingSchema.validate(req.body);
 
-    const { error } = listingSchema.validate(req.body);
+```
+if (error) {
+    return res.status(400).send(error.details[0].message);
+}
 
-    if (error) {
-        return res.status(400).send(error.details[0].message);
-    }
+next();
+```
 
-    next();
 };
 
 const validateReview = (req, res, next) => {
+const { error } = reviewSchema.validate(req.body);
 
-    const { error } = reviewSchema.validate(req.body);
+```
+if (error) {
+    return res.status(400).send(error.details[0].message);
+}
 
-    if (error) {
-        return res.status(400).send(error.details[0].message);
-    }
+next();
+```
 
-    next();
 };
 
-
-// // ===============================
-// // INDEX ROUTE
-// // ===============================
+// ===============================
+// INDEX ROUTE
+// ===============================
 
 // app.get("/listings", wrapAsync(async (req, res) => {
-
 //     const allList = await listing.find();
-
 //     console.log("all listings");
-
 //     res.render("listings/index.ejs", { allList });
-
 // }));
 
-
-// // ===============================
-// // NEW ROUTE
-// // ===============================
+// ===============================
+// NEW ROUTE
+// ===============================
 
 // app.get("/listings/new", (req, res) => {
-
 //     console.log("New Get route working");
-
 //     res.render("listings/new.ejs");
-
 // });
 
-
-// // ===============================
-// // CREATE ROUTE
-// // ===============================
+// ===============================
+// CREATE ROUTE
+// ===============================
 
 // app.post(
 //     "/listings",
 //     validateListing,
 //     wrapAsync(async (req, res) => {
-
 //         console.log("POST /listings");
 
 //         const list = new listing(req.body.listing);
@@ -209,19 +225,16 @@ const validateReview = (req, res, next) => {
 //         console.log("listing saved");
 
 //         res.redirect("/listings");
-
 //     })
 // );
 
-
-// // ===============================
-// // EDIT ROUTE
-// // ===============================
+// ===============================
+// EDIT ROUTE
+// ===============================
 
 // app.get(
 //     "/listings/:id/edit",
 //     wrapAsync(async (req, res) => {
-
 //         console.log("working edit route");
 
 //         let { id } = req.params;
@@ -229,14 +242,12 @@ const validateReview = (req, res, next) => {
 //         const list = await listing.findById(id);
 
 //         res.render("listings/edit.ejs", { list });
-
 //     })
 // );
 
-
-// // ===============================
-// // SHOW ROUTE
-// // ===============================
+// ===============================
+// SHOW ROUTE
+// ===============================
 
 // app.get(
 //     "/listings/:id",
@@ -247,14 +258,12 @@ const validateReview = (req, res, next) => {
 //         const home = await listing.findById(id).populate("reviews");
 
 //         res.render("listings/show.ejs", { home });
-
 //     })
 // );
 
-
-// // ===============================
-// // UPDATE ROUTE
-// // ===============================
+// ===============================
+// UPDATE ROUTE
+// ===============================
 
 // app.put(
 //     "/listings/:id",
@@ -269,26 +278,39 @@ const validateReview = (req, res, next) => {
 //         );
 
 //         res.redirect(`/listings/${id}`);
-
 //     })
 // );
-// // ===============================
-// // REVIEW ROUTE
-// // ===============================
-// app.post("/listings/:id/reviews",validateReview,wrapAsync(async(req,res,next)=>{
-//     let {id}=req.params;
-//     let list=await listing.findById(id);
-//     let newReview=new review(req.body.review);
-//     list.reviews.push(newReview);
-//     await newReview.save();
-//     await list.save();
-//     console.log("New review saved");
-//     res.redirect(`/listings/${id}`);
-// })
+
+// ===============================
+// REVIEW ROUTE
+// ===============================
+
+// app.post(
+//     "/listings/:id/reviews",
+//     validateReview,
+//     wrapAsync(async (req, res, next) => {
+
+//         let { id } = req.params;
+
+//         let list = await listing.findById(id);
+
+//         let newReview = new review(req.body.review);
+
+//         list.reviews.push(newReview);
+
+//         await newReview.save();
+
+//         await list.save();
+
+//         console.log("New review saved");
+
+//         res.redirect(`/listings/${id}`);
+//     })
 // );
-// // ===============================
-// // DELETE ROUTE
-// // ===============================
+
+// ===============================
+// DELETE ROUTE
+// ===============================
 
 // app.delete(
 //     "/listings/:id",
@@ -301,34 +323,35 @@ const validateReview = (req, res, next) => {
 //         console.log(list);
 
 //         res.redirect("/listings");
-
 //     })
 // );
 
-// // /delete route for reviews
+// ===============================
+// DELETE REVIEW ROUTE
+// ===============================
 
-// app.delete("/listings/:id/:r_id/reviews",wrapAsync(async(req,res,next)=>{
-//     let {id,r_id}=req.params;
-//    let remove= await review.findByIdAndDelete(r_id);
-//    console.log(remove);
-//    res.redirect(`/listings/${id}`);
+// app.delete(
+//     "/listings/:id/:r_id/reviews",
+//     wrapAsync(async (req, res, next) => {
 
+//         let { id, r_id } = req.params;
 
-// }));
+//         let remove = await review.findByIdAndDelete(r_id);
 
+//         console.log(remove);
 
-// // ===============================
-// // Error Handling Middleware
-// // ===============================
+//         res.redirect(`/listings/${id}`);
+//     })
+// );
+
+// ===============================
+// Error Handling Middleware
+// ===============================
 
 app.use((err, req, res, next) => {
-
-    console.log(err);
-
-    res.status(500).send("Something went wrong");
-
+console.log(err);
+res.status(500).send("Something went wrong");
 });
-
 
 // ===============================
 // Server
@@ -337,5 +360,5 @@ app.use((err, req, res, next) => {
 const PORT = 3000;
 
 app.listen(PORT, () => {
-    console.log(`server is running on http://localhost:${PORT}/listings`);
+console.log(`server is running on http://localhost:${PORT}/listings`);
 });
