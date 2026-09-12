@@ -94,7 +94,7 @@ app.use(methodOverride("_method"));
 // ===============================
 
 app.get("/", (req, res) => {
-res.send("Hi working fine bro");
+res.render("/listings");
 });
 
 app.use(session(session_options));
